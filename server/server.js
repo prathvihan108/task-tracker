@@ -3,12 +3,20 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import taskRoutes from "./routes/taskRoutes.js";
 
+import cors from "cors";
+
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
+// Middlewares
+app.use(
+	cors({
+		origin: "http://localhost:5173", // your frontend port
+	})
+);
+
 app.use(express.json());
 
 // Routes
