@@ -46,6 +46,9 @@ export default function Dashboard() {
 	return (
 		<div className="p-4 space-y-4">
 			{/* Create Task Input */}
+			<h2 className="flex justify-center m-aut text-2xl font-bold">
+				Task Tracker
+			</h2>
 			<div className="flex justify-center mb-4">
 				<input
 					type="text"

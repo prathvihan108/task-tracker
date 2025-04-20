@@ -10,7 +10,7 @@ export default function Header() {
 
 	return (
 		<header className="flex justify-between items-center p-4 bg-white shadow-md">
-			<h1 className="text-xl font-bold">Motivator</h1>
+			<h1 className="text-xl font-bold">Task Tracker</h1>
 			<nav className="space-x-4">
 				<NavLink to="/dashboard" className="hover:text-blue-500">
 					Dashboard
