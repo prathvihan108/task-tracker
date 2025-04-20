@@ -2,49 +2,55 @@ name: Test and Deploy
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   test:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./client
+
     steps:
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
+      - name: Set up Node
         uses: actions/setup-node@v2
         with:
-          node-version: "16"  # Specify the Node version
+          node-version: "20.15.1"
 
       - name: Install dependencies
         run: npm install
 
       - name: Run tests
-        run: npx vitest run  # Or use 'npm test' if you're using npm test script
+        run: npm test  # or npx vitest run
 
   deploy:
+    needs: test
     runs-on: ubuntu-latest
-    needs: test  # Ensure deploy runs only after tests pass
-    if: success()  # Only deploy if tests pass
+    if: github.ref == 'refs/heads/main'
+
+    defaults:
+      run:
+        working-directory: ./client
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
+      - name: Set up Node
         uses: actions/setup-node@v2
         with:
-          node-version: "16"
+          node-version: "20.15.1"
 
       - name: Install dependencies
         run: npm install
 
       - name: Build the app
-        run: npm run build  # This assumes you have a build script in your package.json
+        run: npm run build  # This is the build step for React
 
       - name: Deploy to Vercel
-        run: vercel --prod --token ${{ secrets.VERCEL_TOKEN }}  # Deploy to Vercel using the Vercel CLI
+        run: vercel --prod --token ${{ secrets.VERCEL_TOKEN }}  # Make sure you have the Vercel token in GitHub secrets
