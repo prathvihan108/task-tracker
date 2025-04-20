@@ -1,4 +1,5 @@
 import axios from "../api";
+import { toast } from "react-toastify";
 
 export default function TaskItem({ task, refresh }) {
 	const changeStatus = async () => {
@@ -9,6 +10,9 @@ export default function TaskItem({ task, refresh }) {
 		};
 		await axios.put(`/tasks/${task._id}`, { status: next[task.status] });
 		refresh();
+		toast.success(`Task Moved to ${next[task.status]}`, {
+			autoClose: 2000,
+		});
 	};
 
 	const deleteTask = async () => {

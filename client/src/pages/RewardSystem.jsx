@@ -1,18 +1,19 @@
 import { useState } from "react";
 import axios from "../api";
+import { toast } from "react-toastify";
 
 export default function RewardSystem() {
 	const [title, setTitle] = useState("");
-	const [threshold, setThreshold] = useState(100);
-	const [active, setActive] = useState(false);
 
 	const createReward = async () => {
 		await axios.post("/rewards", {
 			title,
-			disciplineThreshold: threshold,
-			active,
 		});
+
 		setTitle("");
+		toast.success(`Reward created successfully`, {
+			autoClose: 2000,
+		});
 	};
 
 	return (
@@ -25,24 +26,9 @@ export default function RewardSystem() {
 				value={title}
 				onChange={(e) => setTitle(e.target.value)}
 			/>
-			<input
-				type="number"
-				placeholder="Discipline Threshold %"
-				className="border p-2 w-full mb-2"
-				value={threshold}
-				onChange={(e) => setThreshold(Number(e.target.value))}
-			/>
-			<label className="block mb-4">
-				<input
-					type="checkbox"
-					checked={active}
-					onChange={() => setActive(!active)}
-				/>
-				<span className="ml-2">Activate Now</span>
-			</label>
 			<button
 				onClick={createReward}
-				className="bg-blue-500 text-white px-4 py-2 rounded"
+				className="bg-blue-500 text-white px-4 py-2 rounded mt-2"
 			>
 				Save Reward
 			</button>

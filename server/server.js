@@ -24,6 +24,7 @@ app.use(express.json());
 // Routes
 app.use("/api/tasks", taskRoutes);
 app.use("/api/rewards", rewardRoutes);
+
 app.get("/", (req, res) => {
 	res.json({ hello: 123 });
 });

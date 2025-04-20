@@ -3,11 +3,13 @@ import TaskColumn from "../components/TaskColumn";
 import Heatmap from "../components/Heatmap";
 import RewardPopup from "../components/RewardPopup";
 import axios from "../api";
+import { toast } from "react-toastify";
 
 export default function Dashboard() {
 	const [tasks, setTasks] = useState([]);
 	const [showReward, setShowReward] = useState(false);
 	const [newTask, setNewTask] = useState("");
+	const [activeTab, setActiveTab] = useState("todo");
 
 	const fetchTasks = async () => {
 		const res = await axios.get("/tasks");
@@ -34,6 +36,8 @@ export default function Dashboard() {
 		if (!newTask.trim()) return;
 		await axios.post("/tasks", { title: newTask });
 		setNewTask("");
+		toast.success(`Task created successfully`, { autoClose: 2000 });
+
 		updateTasks();
 	};
 
@@ -58,23 +62,49 @@ export default function Dashboard() {
 				</button>
 			</div>
 
-			<div className="flex justify-around space-x-4">
-				<TaskColumn
-					title="To Do"
-					tasks={groupTasks("todo")}
-					refresh={updateTasks}
-				/>
-				<TaskColumn
-					title="In Progress"
-					tasks={groupTasks("inprogress")}
-					refresh={updateTasks}
-				/>
-				<TaskColumn
-					title="Completed"
-					tasks={groupTasks("completed")}
-					refresh={updateTasks}
-				/>
+			<div className="flex justify-around border-b border-gray-300 mb-4">
+				{["todo", "inprogress", "completed"].map((tab) => (
+					<button
+						key={tab}
+						className={`py-2 px-4 font-semibold ${
+							activeTab === tab
+								? "text-blue-600 border-b-2 border-blue-600"
+								: "text-gray-500"
+						}`}
+						onClick={() => setActiveTab(tab)}
+					>
+						{tab === "todo"
+							? "To Do"
+							: tab === "inprogress"
+							? "In Progress"
+							: "Completed"}
+					</button>
+				))}
 			</div>
+			<div className="w-screen">
+				{activeTab === "todo" && (
+					<TaskColumn
+						title="To Do"
+						tasks={groupTasks("todo")}
+						refresh={updateTasks}
+					/>
+				)}
+				{activeTab === "inprogress" && (
+					<TaskColumn
+						title="In Progress"
+						tasks={groupTasks("inprogress")}
+						refresh={updateTasks}
+					/>
+				)}
+				{activeTab === "completed" && (
+					<TaskColumn
+						title="Completed"
+						tasks={groupTasks("completed")}
+						refresh={updateTasks}
+					/>
+				)}
+			</div>
+
 			<Heatmap tasks={tasks} />
 			{showReward && <RewardPopup />}
 		</div>
