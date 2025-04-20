@@ -1,19 +1,13 @@
 import mongoose from "mongoose";
 
-const taskSchema = new mongoose.Schema(
-	{
-		task: {
-			type: String,
-			required: true,
-		},
-		completed: {
-			type: Boolean,
-			default: false,
-		},
+const taskSchema = new mongoose.Schema({
+	title: String,
+	status: {
+		type: String,
+		enum: ["todo", "inprogress", "completed"],
+		default: "todo",
 	},
-	{ timestamps: true }
-);
+	date: { type: Date, default: () => new Date().toDateString() },
+});
 
-const Task = mongoose.model("Task", taskSchema);
-
-export default Task;
+export default mongoose.model("Task", taskSchema);

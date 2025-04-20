@@ -1,7 +1,9 @@
 import express from "express";
-import mongoose from "mongoose";
+import connectDB from "./config/db.js";
 import dotenv from "dotenv";
+
 import taskRoutes from "./routes/taskRoutes.js";
+import rewardRoutes from "./routes/rewardRoutes.js";
 
 import cors from "cors";
 
@@ -21,20 +23,16 @@ app.use(express.json());
 
 // Routes
 app.use("/api/tasks", taskRoutes);
+app.use("/api/rewards", rewardRoutes);
 app.get("/", (req, res) => {
 	res.json({ hello: 123 });
 });
 
 // MongoDB connection
-mongoose
-	.connect(process.env.MONGO_URI, {
-		useNewUrlParser: true,
-		useUnifiedTopology: true,
-	})
-	.then(() => {
-		console.log("MongoDB connected");
-		app.listen(PORT, () =>
-			console.log(`Server running on http://localhost:${PORT}`)
-		);
-	})
-	.catch((err) => console.error("MongoDB connection error:", err));
+
+// Connect to MongoDB
+await connectDB();
+
+app.listen(PORT, () =>
+	console.log(`Server running on http://localhost:${PORT}`)
+);
