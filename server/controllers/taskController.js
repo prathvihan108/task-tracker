@@ -14,7 +14,9 @@ export const createTask = async (req, res) => {
 export const updateTaskStatus = async (req, res) => {
 	const { id } = req.params;
 	const { status } = req.body;
+
 	await Task.findByIdAndUpdate(id, { status });
+	console.log("status backend:", status);
 	res.sendStatus(200);
 };
 

@@ -17,6 +17,7 @@ export default function Dashboard() {
 	const checkRewardStatus = async () => {
 		const res = await axios.get("/rewards/status");
 		setShowReward(res.data.showReward);
+		console.log("reward status:", res.data.showReward);
 	};
 
 	useEffect(() => {
