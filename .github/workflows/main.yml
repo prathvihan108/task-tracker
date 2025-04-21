@@ -56,4 +56,4 @@ jobs:
         run: npm install -g vercel
 
       - name: Deploy to Vercel
-        run: vercel --prod --token ${{ secrets.VERCEL_TOKEN }} # Make sure you have the Vercel token in GitHub secrets
+        run: vercel --prod --yes --token ${{ secrets.VERCEL_TOKEN }}
