@@ -28,9 +28,11 @@ export const createReward = async (req, res) => {
 
 export const getRewards = async (req, res) => {
 	try {
+		console.log("method called");
 		const { uid } = req.params;
 
 		const user = await User.findOne({ uid });
+		console.log("user from getRewards ", user);
 
 		if (!user) {
 			return res.status(404).json({ message: "User not found" });

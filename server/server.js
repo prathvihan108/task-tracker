@@ -18,13 +18,15 @@ const PORT = process.env.PORT || 5000;
 app.use(
 	cors({
 		origin: process.env.CLIENT_ORIGIN, // your frontend port
+		methods: ["GET", "POST", "PUT", "DELETE"],
+		allowedHeaders: ["Content-Type", "Authorization"],
 	})
 );
 
 app.use(express.json());
 
 // Routes
-app.use("/api", verify);
+// app.use("/api", verify);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/rewards", rewardRoutes);
 

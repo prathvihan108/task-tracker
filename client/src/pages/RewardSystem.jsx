@@ -1,19 +1,38 @@
 import { useState } from "react";
 import axios from "../api";
 import { toast } from "react-toastify";
+import { auth } from "../firebase/config.js";
 
 export default function RewardSystem() {
 	const [title, setTitle] = useState("");
 
 	const createReward = async () => {
-		await axios.post("/rewards", {
-			title,
-		});
+		const user = auth.currentUser;
+		if (!user) {
+			console.error("No user is logged in");
+			return;
+		}
 
-		setTitle("");
-		toast.success(`Reward created successfully`, {
-			autoClose: 2000,
-		});
+		const idToken = await user.getIdToken();
+
+		try {
+			const response = await axios.post(
+				`/rewards/${user?.uid}`,
+				{ title },
+				{
+					headers: {
+						Authorization: `Bearer ${idToken}`,
+					},
+				}
+			);
+
+			setTitle("");
+			toast.success(`Reward created successfully`, { autoClose: 2000 });
+			console.log("Reward created: ", response.data);
+		} catch (error) {
+			console.error("Error creating reward:", error);
+			toast.error("Error creating reward", { autoClose: 2000 });
+		}
 	};
 
 	return (

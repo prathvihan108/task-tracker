@@ -9,8 +9,8 @@ import {
 
 const router = express.Router();
 
-router.get("/", verifyToken, getTasks);
-router.post("/", verifyToken, createTask);
+router.get("/:uid", verifyToken, getTasks);
+router.post("/:uid", verifyToken, createTask);
 router.put("/:id", verifyToken, updateTaskStatus);
 router.delete("/:id", verifyToken, deleteTask);
 

@@ -4,6 +4,7 @@ import Heatmap from "../components/Heatmap";
 import RewardPopup from "../components/RewardPopup";
 import axios from "../api";
 import { toast } from "react-toastify";
+import { auth } from "../firebase/config.js";
 
 export default function Dashboard() {
 	const [tasks, setTasks] = useState([]);
@@ -12,14 +13,48 @@ export default function Dashboard() {
 	const [activeTab, setActiveTab] = useState("todo");
 
 	const fetchTasks = async () => {
-		const res = await axios.get("/tasks");
-		setTasks(res.data);
+		const user = auth.currentUser;
+		console.log("current user fetched from firebase: ", user);
+		if (!user) {
+			console.error("No user is logged in");
+			return;
+		}
+		const idToken = await user.getIdToken();
+
+		try {
+			const res = await axios.get(`/tasks/${user?.uid}`, {
+				headers: {
+					Authorization: `Bearer ${idToken}`,
+				},
+			});
+
+			setTasks(res.data);
+		} catch (error) {
+			console.error("Error fetching tasks:", error);
+		}
 	};
 
 	const checkRewardStatus = async () => {
-		const res = await axios.get("/rewards/status");
-		setShowReward(res.data.showReward);
-		console.log("reward status:", res.data.showReward);
+		const user = auth.currentUser;
+		if (!user) {
+			console.error("No user is logged in");
+			return;
+		}
+
+		const idToken = await user.getIdToken();
+
+		try {
+			const res = await axios.get(`/rewards/status/${user?.uid}`, {
+				headers: {
+					Authorization: `Bearer ${idToken}`,
+				},
+			});
+
+			setShowReward(res.data.showReward);
+			console.log("reward status:", res.data.showReward);
+		} catch (error) {
+			console.error("Error checking reward status:", error);
+		}
 	};
 
 	useEffect(() => {
@@ -34,11 +69,35 @@ export default function Dashboard() {
 
 	const handleCreateTask = async () => {
 		if (!newTask.trim()) return;
-		await axios.post("/tasks", { title: newTask });
-		setNewTask("");
-		toast.success(`Task created successfully`, { autoClose: 2000 });
 
-		updateTasks();
+		const user = auth.currentUser;
+		if (!user) {
+			console.error("No user is logged in");
+			return;
+		}
+
+		const idToken = await user.getIdToken();
+
+		try {
+			const response = await axios.post(
+				`/tasks/${user?.uid}`,
+				{ title: newTask },
+				{
+					headers: {
+						Authorization: `Bearer ${idToken}`,
+					},
+				}
+			);
+
+			setNewTask("");
+			toast.success(`Task created successfully`, { autoClose: 2000 });
+			console.log("Task Created: ", response.data);
+
+			updateTasks();
+		} catch (error) {
+			console.error("Error creating task:", error);
+			toast.error("Error creating task", { autoClose: 2000 });
+		}
 	};
 
 	const groupTasks = (status) => tasks.filter((t) => t.status === status);

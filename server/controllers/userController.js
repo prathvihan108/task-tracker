@@ -3,6 +3,7 @@ import User from "../models/User.js";
 export const createUser = async (req, res) => {
 	try {
 		const { uid, name, email, photoURL } = req.body;
+		console.log("uid: ", uid);
 
 		let user = await User.findOne({ uid });
 
@@ -15,10 +16,12 @@ export const createUser = async (req, res) => {
 			});
 
 			await user.save();
+			//console.log("user in backend and db saved:", user);
 			return res
 				.status(201)
 				.json({ message: "User created successfully", user });
 		} else {
+			//console.log("user in backend and db saved (else):", user);
 			return res.status(200).json({ message: "User already exists", user });
 		}
 	} catch (error) {

@@ -9,9 +9,8 @@ import {
 
 const router = express.Router();
 
-router.post("/", verifyToken, createReward);
-router.get("/", verifyToken, getRewards);
-router.get("/status", verifyToken, getRewardStatus);
-router.put("/:id/activate", activateReward);
+router.post("/:uid", verifyToken, createReward);
+router.get("/:uid", verifyToken, getRewards);
+router.get("/status/:uid", verifyToken, getRewardStatus);
 
 export default router;

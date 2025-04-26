@@ -1,10 +1,21 @@
 import { useState } from "react";
 import axios from "../api";
+import User from "../../../server/models/User";
+import { auth } from "../firebase/config.js";
+
 export default function RewardPopup() {
 	const [rewards, setRewards] = useState([]);
 
 	const getRewards = async () => {
-		const { data } = await axios.get("/rewards");
+		const user = auth.currentUser;
+		const idToken = await user.getIdToken(); // get fresh token
+
+		const { data } = await axios.get(`/rewards/${user?.uid}`, {
+			headers: {
+				Authorization: `Bearer ${idToken}`,
+			},
+		});
+
 		console.log(data);
 		setRewards(data);
 	};

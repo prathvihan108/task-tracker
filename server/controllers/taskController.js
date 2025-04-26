@@ -4,8 +4,10 @@ import User from "../models/User.js";
 export const getTasks = async (req, res) => {
 	try {
 		const { uid } = req.params;
+		//console.log("uid: bac", uid);
 
 		const user = await User.findOne({ uid });
+		//console.log("user back", user);
 
 		if (!user) {
 			return res.status(404).json({ message: "User not found" });

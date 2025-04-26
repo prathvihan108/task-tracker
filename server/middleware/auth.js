@@ -1,5 +1,10 @@
 import admin from "firebase-admin";
-import serviceAccount from "../serviceAccountKey.json" assert { type: "json" };
+
+//dev or production
+const serviceAccount = process.env.GOOGLE_SERVICE_ACCOUNT
+	? JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT)
+	: (await import("../serviceAccountKey.json", { assert: { type: "json" } }))
+			.default;
 
 admin.initializeApp({
 	credential: admin.credential.cert(serviceAccount),
@@ -15,6 +20,7 @@ const verifyToken = async (req, res, next) => {
 	try {
 		const decodedToken = await admin.auth().verifyIdToken(token);
 		req.user = decodedToken; // Attach decoded token to request
+		console.log("Token varifies in backend");
 		next(); // Proceed to the next middleware or route handler
 	} catch (error) {
 		console.error("Error verifying token:", error);

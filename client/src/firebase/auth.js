@@ -8,10 +8,9 @@ export const signInWithGoogle = async () => {
 		const result = await signInWithPopup(auth, googleProvider);
 		const user = result.user;
 
-		// Send user to backend
-		const idToken = await user.getIdToken();
+		const idToken = await user.getIdToken(); // force refresh
 
-		await axios.post(
+		const response = await axios.post(
 			"/users",
 			{
 				uid: user.uid,
@@ -25,6 +24,8 @@ export const signInWithGoogle = async () => {
 				},
 			}
 		);
+		console.log("Backend response:", response.data);
+		console.log("Fire base user object:", user);
 
 		return user;
 	} catch (error) {
