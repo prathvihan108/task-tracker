@@ -2,22 +2,29 @@ import { useState } from "react";
 import axios from "../api";
 import User from "../../../server/models/User";
 import { auth } from "../firebase/config.js";
+import { toast } from "react-toastify";
 
 export default function RewardPopup() {
 	const [rewards, setRewards] = useState([]);
+	const [rewardsPresent, setRewardsPresent] = useState(true);
 
 	const getRewards = async () => {
 		const user = auth.currentUser;
 		const idToken = await user.getIdToken(); // get fresh token
 
-		const { data } = await axios.get(`/rewards/${user?.uid}`, {
+		const response = await axios.get(`/rewards/${user?.uid}`, {
 			headers: {
 				Authorization: `Bearer ${idToken}`,
 			},
 		});
 
-		console.log(data);
-		setRewards(data);
+		if (response.data.length == 0) {
+			toast.success(`No rewards found for today,set it in Rewards tab`, {
+				autoClose: 2000,
+			});
+		} else {
+			setRewards(response.data);
+		}
 	};
 
 	return (

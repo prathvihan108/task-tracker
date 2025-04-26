@@ -40,6 +40,12 @@ export const getRewards = async (req, res) => {
 
 		const rewards = await Reward.find({ _id: { $in: user.rewards } });
 
+		if (rewards.length === 0) {
+			return res
+				.status(404)
+				.json({ message: "No rewards found for this user" });
+		}
+
 		console.log("User's rewards:", rewards);
 		res.status(200).json(rewards);
 	} catch (error) {
