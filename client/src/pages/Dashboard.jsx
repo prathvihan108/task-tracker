@@ -6,9 +6,9 @@ import axios from "../api";
 import { toast } from "react-toastify";
 import { auth } from "../firebase/config.js";
 
-export default function Dashboard() {
+export default function Dashboard({ showReward, setShowReward }) {
 	const [tasks, setTasks] = useState([]);
-	const [showReward, setShowReward] = useState(false);
+
 	const [newTask, setNewTask] = useState("");
 	const [activeTab, setActiveTab] = useState("todo");
 
@@ -50,7 +50,7 @@ export default function Dashboard() {
 				},
 			});
 
-			setShowReward(res.data.showReward);
+			setShowReward(res?.data?.showReward);
 			console.log("reward status:", res.data.showReward);
 		} catch (error) {
 			console.error("Error checking reward status:", error);
@@ -168,7 +168,9 @@ export default function Dashboard() {
 			</div>
 
 			<Heatmap tasks={tasks} />
-			{showReward && <RewardPopup />}
+			{showReward && (
+				<RewardPopup showReward={showReward} setShowReward={setShowReward} />
+			)}
 		</div>
 	);
 }

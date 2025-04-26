@@ -4,30 +4,33 @@ import User from "../../../server/models/User";
 import { auth } from "../firebase/config.js";
 import { toast } from "react-toastify";
 
-export default function RewardPopup() {
+export default function RewardPopup(showReward, setShowReward) {
 	const [rewards, setRewards] = useState([]);
-	const [rewardsPresent, setRewardsPresent] = useState(true);
 
 	const getRewards = async () => {
 		const user = auth.currentUser;
-		const idToken = await user.getIdToken(); // get fresh token
+		const idToken = await user.getIdToken();
 
-		const response = await axios.get(`/rewards/${user?.uid}`, {
-			headers: {
-				Authorization: `Bearer ${idToken}`,
-			},
-		});
-
-		if (response.data.length == 0) {
-			toast.success(`No rewards found for today,set it in Rewards tab`, {
-				autoClose: 2000,
+		try {
+			const response = await axios.get(`/rewards/${user?.uid}`, {
+				headers: {
+					Authorization: `Bearer ${idToken}`,
+				},
 			});
-		} else {
-			setRewards(response.data);
+			console.log("Reward array length: ", response.data.length);
+			if (response.data.length == 0) {
+				toast.success(`No rewards found for today,set it in Rewards tab`, {
+					autoClose: 2000,
+				});
+			} else {
+				setRewards(response.data);
+			}
+		} catch (error) {
+			console.log("Rewards fetching error: ", error);
 		}
 	};
 
-	return (
+	return showReward ? (
 		<div className="mt-4 p-4 bg-yellow-100 text-center rounded shadow">
 			<h2 className="text-xl font-bold mb-2">
 				🎉 You’ve earned your rewards for the day!
@@ -56,5 +59,7 @@ export default function RewardPopup() {
 				</div>
 			)}
 		</div>
+	) : (
+		<></>
 	);
 }

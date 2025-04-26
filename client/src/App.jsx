@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+import { useState } from "react";
 import Dashboard from "./pages/Dashboard.jsx";
 import RewardSystem from "./pages/RewardSystem";
 import Header from "./components/Header";
@@ -8,6 +9,8 @@ import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 export default function App() {
+	const [showReward, setShowReward] = useState(false);
+
 	return (
 		<>
 			<ToastContainer position="top-right" />
@@ -19,7 +22,10 @@ export default function App() {
 						path="/dashboard"
 						element={
 							<ProtectedRoute>
-								<Dashboard />
+								<Dashboard
+									showReward={showReward}
+									setShowReward={setShowReward}
+								/>
 							</ProtectedRoute>
 						}
 					/>
@@ -27,7 +33,10 @@ export default function App() {
 						path="/reward"
 						element={
 							<ProtectedRoute>
-								<RewardSystem />
+								<RewardSystem
+									showReward={showReward}
+									setShowReward={setShowReward}
+								/>
 							</ProtectedRoute>
 						}
 					/>

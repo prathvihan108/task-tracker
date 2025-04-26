@@ -40,12 +40,6 @@ export const getRewards = async (req, res) => {
 
 		const rewards = await Reward.find({ _id: { $in: user.rewards } });
 
-		if (rewards.length === 0) {
-			return res
-				.status(404)
-				.json({ message: "No rewards found for this user" });
-		}
-
 		console.log("User's rewards:", rewards);
 		res.status(200).json(rewards);
 	} catch (error) {
@@ -84,31 +78,22 @@ export const getRewardStatus = async (req, res) => {
 	}
 };
 
-export const activateReward = async (req, res) => {
+export const resetRewards = async (req, res) => {
+	const { uid } = req.params;
+
 	try {
-		const { uid, rewardId } = req.params;
-		const { active } = req.body;
-
 		const user = await User.findOne({ uid });
-
 		if (!user) {
 			return res.status(404).json({ message: "User not found" });
 		}
 
-		const reward = await Reward.findOne({ _id: rewardId, user: user._id });
+		// Clear user's rewards array
+		user.rewards = [];
+		await user.save();
 
-		if (!reward) {
-			return res
-				.status(404)
-				.json({ message: "Reward not found for this user" });
-		}
-
-		reward.active = active;
-		await reward.save();
-
-		res.status(200).json(reward);
+		res.status(200).json({ message: "All rewards reset successfully" });
 	} catch (error) {
-		console.error("Error activating reward:", error);
-		res.status(500).json({ message: "Failed to activate reward" });
+		console.error("Error resetting rewards:", error);
+		res.status(500).json({ message: "Server error" });
 	}
 };

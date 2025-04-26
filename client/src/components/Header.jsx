@@ -28,10 +28,10 @@ export default function Header() {
 						</nav>
 						<div className="flex items-center space-x-3">
 							<img
-								src={user?.photoURL || "/default-profile.jpg"}
+								src={user?.photoURL || "/profile.png"}
 								alt="Profile"
 								className="w-8 h-8 rounded-full object-cover"
-								onError={(e) => (e.target.src = "/default-profile.jpg")}
+								onError={(e) => (e.target.src = "/profile.png")}
 							/>
 
 							<div className="text-sm">
