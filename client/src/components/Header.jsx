@@ -1,4 +1,5 @@
 import { NavLink, useNavigate } from "react-router-dom";
+import { signOutUser } from "../firebase/auth";
 
 export default function Header() {
 	const navigate = useNavigate();
@@ -19,7 +20,7 @@ export default function Header() {
 					Reward System
 				</NavLink>
 				<button
-					onClick={logout}
+					onClick={signOutUser}
 					className="bg-red-500 text-white px-3 py-1 rounded"
 				>
 					Logout

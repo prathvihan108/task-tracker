@@ -1,47 +1,106 @@
 import Reward from "../models/Reward.js";
 import Task from "../models/Task.js";
+import User from "../models/User.js";
 
 export const createReward = async (req, res) => {
-	const reward = new Reward(req.body);
-	await reward.save();
-	res.json(reward);
+	try {
+		const { uid } = req.params;
+		const { title } = req.body;
+
+		const user = await User.findOne({ uid });
+
+		if (!user) {
+			return res.status(404).json({ message: "User not found" });
+		}
+
+		const reward = new Reward({ title, user: user._id });
+		await reward.save();
+
+		user.rewards.push(reward._id);
+		await user.save();
+
+		res.status(201).json(reward);
+	} catch (error) {
+		console.error("Error creating reward:", error);
+		res.status(500).json({ message: "Internal server error" });
+	}
 };
 
 export const getRewards = async (req, res) => {
 	try {
-		const startOfDay = new Date();
-		startOfDay.setHours(0, 0, 0, 0);
+		const { uid } = req.params;
 
-		const endOfDay = new Date();
-		endOfDay.setHours(23, 59, 59, 999);
+		const user = await User.findOne({ uid });
 
-		const rewards = await Reward.find({
-			createdAt: { $gte: startOfDay, $lte: endOfDay },
-		});
+		if (!user) {
+			return res.status(404).json({ message: "User not found" });
+		}
 
-		console.log("Today's rewards:", rewards);
+		const rewards = await Reward.find({ _id: { $in: user.rewards } });
+
+		console.log("User's rewards:", rewards);
 		res.status(200).json(rewards);
 	} catch (error) {
-		res.status(500).json({ message: "Failed to fetch today's rewards" });
+		console.error("Error fetching rewards:", error);
+		res.status(500).json({ message: "Failed to fetch rewards" });
 	}
 };
 
 export const getRewardStatus = async (req, res) => {
-	const tasks = await Task.find({ date: new Date().toDateString() });
-	const allCompleted = tasks.every((task) => task.status === "completed");
-	console.log("all completed", allCompleted);
-	const reward = await Reward.findOne();
+	try {
+		const { uid } = req.params;
 
-	if (allCompleted) {
-		res.json({ showReward: true, reward });
-	} else {
-		res.json({ showReward: false });
+		const user = await User.findOne({ uid });
+		if (!user) {
+			return res.status(404).json({ message: "User not found" });
+		}
+
+		const tasks = await Task.find({
+			_id: { $in: user.tasks },
+			date: new Date().toDateString(),
+		});
+
+		const allCompleted = tasks.every((task) => task.status === "completed");
+		console.log("All tasks completed:", allCompleted);
+
+		const reward = await Reward.findOne({ user: user._id });
+
+		if (allCompleted) {
+			res.json({ showReward: true, reward });
+		} else {
+			res.json({ showReward: false });
+		}
+	} catch (error) {
+		console.error("Error getting reward status:", error);
+		res.status(500).json({ message: "Failed to fetch reward status" });
 	}
 };
 
 export const activateReward = async (req, res) => {
-	const { id } = req.params;
-	const { active } = req.body;
-	await Reward.findByIdAndUpdate(id, { active });
-	res.sendStatus(200);
+	try {
+		const { uid, rewardId } = req.params;
+		const { active } = req.body;
+
+		const user = await User.findOne({ uid });
+
+		if (!user) {
+			return res.status(404).json({ message: "User not found" });
+		}
+
+		const reward = await Reward.findOne({ _id: rewardId, user: user._id });
+
+		if (!reward) {
+			return res
+				.status(404)
+				.json({ message: "Reward not found for this user" });
+		}
+
+		reward.active = active;
+		await reward.save();
+
+		res.status(200).json(reward);
+	} catch (error) {
+		console.error("Error activating reward:", error);
+		res.status(500).json({ message: "Failed to activate reward" });
+	}
 };
