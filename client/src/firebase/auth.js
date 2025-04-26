@@ -7,8 +7,9 @@ export const signInWithGoogle = async () => {
 	try {
 		const result = await signInWithPopup(auth, googleProvider);
 		const user = result.user;
+		console.log("user signed in", user);
 
-		const idToken = await user.getIdToken(); // force refresh
+		const idToken = await user.getIdToken();
 
 		const response = await axios.post(
 			"/users",
