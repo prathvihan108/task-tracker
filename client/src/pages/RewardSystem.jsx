@@ -85,6 +85,18 @@ export default function RewardSystem({ showReward, setShowReward }) {
 					Reset Rewards
 				</button>
 			</div>
+
+			<div className="bg-gray-100 p-4 rounded-lg shadow-md max-w-md mx-auto">
+				<h1 className="text-xl font-bold text-gray-800 mb-3">Information:</h1>
+				<p className="text-gray-700 text-sm mb-2">
+					You can claim your rewards once all tasks are completed.
+				</p>
+				<p className="text-gray-700 text-sm">
+					Tasks and rewards are saved (valid) from 12:00 AM to 11:59 PM
+					daily.That is you will not have the access to previous days tasks and
+					rewards.
+				</p>
+			</div>
 		</div>
 	);
 }
