@@ -136,31 +136,32 @@ export default function Dashboard({ showReward, setShowReward }) {
 						onClick={() => setActiveTab(tab)}
 					>
 						{tab === "todo"
-							? "To Do"
+							? `To Do: ${groupTasks(tab).length}`
 							: tab === "inprogress"
-							? "In Progress"
-							: "Completed"}
+							? `In progress: ${groupTasks(tab).length}`
+							: `Completed: ${groupTasks(tab).length}`}
 					</button>
 				))}
 			</div>
 			<div className="w-screen">
 				{activeTab === "todo" && (
 					<TaskColumn
-						title="To Do"
+						title="To Do tasks"
 						tasks={groupTasks("todo")}
+						count={groupTasks.length}
 						refresh={updateTasks}
 					/>
 				)}
 				{activeTab === "inprogress" && (
 					<TaskColumn
-						title="In Progress"
+						title="In Progress tasks"
 						tasks={groupTasks("inprogress")}
 						refresh={updateTasks}
 					/>
 				)}
 				{activeTab === "completed" && (
 					<TaskColumn
-						title="Completed"
+						title="Completed tasks"
 						tasks={groupTasks("completed")}
 						refresh={updateTasks}
 					/>

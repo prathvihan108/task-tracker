@@ -5,7 +5,7 @@ export default function Heatmap({ tasks }) {
 
 	return (
 		<div className="bg-white p-4 rounded shadow text-center">
-			<h3 className="font-semibold text-lg">Discipline Percentage</h3>
+			<h3 className="font-semibold text-lg">Completion Percentage</h3>
 			<p className="text-xl mt-2">{percentage}% Completed</p>
 			<div className="h-3 mt-2 bg-gray-200 rounded">
 				<div
