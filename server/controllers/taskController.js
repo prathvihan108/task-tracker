@@ -1,19 +1,27 @@
 import Task from "../models/Task.js";
 import User from "../models/User.js";
-
 export const getTasks = async (req, res) => {
 	try {
 		const { uid } = req.params;
-		//console.log("uid: bac", uid);
 
 		const user = await User.findOne({ uid });
-		//console.log("user back", user);
 
 		if (!user) {
 			return res.status(404).json({ message: "User not found" });
 		}
 
-		const tasks = await Task.find({ _id: { $in: user.tasks } });
+		// Get today's date range
+		const startOfDay = new Date();
+		startOfDay.setHours(0, 0, 0, 0); // 12:00 AM
+
+		const endOfDay = new Date();
+		endOfDay.setHours(23, 59, 59, 999); // 11:59 PM
+
+		const tasks = await Task.find({
+			_id: { $in: user.tasks },
+			createdAt: { $gte: startOfDay, $lte: endOfDay },
+		});
+
 		res.json(tasks);
 	} catch (error) {
 		console.error("Error fetching tasks:", error);

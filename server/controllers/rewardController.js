@@ -38,7 +38,17 @@ export const getRewards = async (req, res) => {
 			return res.status(404).json({ message: "User not found" });
 		}
 
-		const rewards = await Reward.find({ _id: { $in: user.rewards } });
+		// Get today's date range
+		const startOfDay = new Date();
+		startOfDay.setHours(0, 0, 0, 0);
+
+		const endOfDay = new Date();
+		endOfDay.setHours(23, 59, 59, 999);
+
+		const rewards = await Reward.find({
+			_id: { $in: user.rewards },
+			createdAt: { $gte: startOfDay, $lte: endOfDay },
+		});
 
 		console.log("User's rewards:", rewards);
 		res.status(200).json(rewards);
@@ -47,7 +57,6 @@ export const getRewards = async (req, res) => {
 		res.status(500).json({ message: "Failed to fetch rewards" });
 	}
 };
-
 export const getRewardStatus = async (req, res) => {
 	try {
 		const { uid } = req.params;
@@ -57,13 +66,22 @@ export const getRewardStatus = async (req, res) => {
 			return res.status(404).json({ message: "User not found" });
 		}
 
-		const tasks = await Task.find({
+		// Calculate today's start and end
+		const startOfDay = new Date();
+		startOfDay.setHours(0, 0, 0, 0);
+
+		const endOfDay = new Date();
+		endOfDay.setHours(23, 59, 59, 999);
+
+		const todayTasks = await Task.find({
 			_id: { $in: user.tasks },
-			date: new Date().toDateString(),
+			createdAt: { $gte: startOfDay, $lte: endOfDay }, // CREATED today
 		});
 
-		const allCompleted = tasks.every((task) => task.status === "completed");
-		console.log("All tasks completed:", allCompleted);
+		const allCompleted =
+			todayTasks.length > 0 &&
+			todayTasks.every((task) => task.status === "completed");
+		console.log("All tasks created today completed:", allCompleted);
 
 		const reward = await Reward.findOne({ user: user._id });
 
