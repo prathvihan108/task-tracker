@@ -1,10 +1,24 @@
 import admin from "firebase-admin";
+import fs from "fs";
+import path from "path";
 
-//dev or production
-const serviceAccount = process.env.GOOGLE_SERVICE_ACCOUNT
-	? JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT)
-	: (await import("../serviceAccountKey.json", { assert: { type: "json" } }))
-			.default;
+// Get the current directory of the module in ES Module scope
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
+
+// Set up path for local and production
+const localFilePath = path.join(__dirname, "../secrets/serviceAccountKey.json");
+const productionFilePath = "/etc/secrets/serviceAccountKey.json";
+
+// Use the correct path based on the environment
+const filePath = fs.existsSync(localFilePath)
+	? localFilePath
+	: productionFilePath;
+
+if (!fs.existsSync(filePath)) {
+	throw new Error("Service account key file not found");
+}
+
+const serviceAccount = JSON.parse(fs.readFileSync(filePath, "utf8"));
 
 admin.initializeApp({
 	credential: admin.credential.cert(serviceAccount),
@@ -19,9 +33,9 @@ const verifyToken = async (req, res, next) => {
 
 	try {
 		const decodedToken = await admin.auth().verifyIdToken(token);
-		req.user = decodedToken; // Attach decoded token to request
-		console.log("Token varifies in backend");
-		next(); // Proceed to the next middleware or route handler
+		req.user = decodedToken;
+		console.log("Token verified in backend");
+		next();
 	} catch (error) {
 		console.error("Error verifying token:", error);
 		return res.status(401).json({ message: "Invalid or expired token" });

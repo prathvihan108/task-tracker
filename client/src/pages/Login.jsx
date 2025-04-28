@@ -7,7 +7,9 @@ export default function Login() {
 
 	const handleLogin = async () => {
 		try {
+			console.log("trying to open sign in with google pop up");
 			const user = await signInWithGoogle();
+			console.log("signin completed");
 			console.log("Logged in as", user.displayName);
 			navigate("/dashboard");
 		} catch (err) {

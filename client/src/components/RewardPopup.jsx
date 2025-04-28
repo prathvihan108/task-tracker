@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "../api";
-import User from "../../../server/models/User";
+
 import { auth } from "../firebase/config.js";
 import { toast } from "react-toastify";
 
