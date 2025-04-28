@@ -48,12 +48,12 @@ export default function RewardPopup(showReward, setShowReward) {
 					{rewards.map((reward) => (
 						<div
 							key={reward._id}
-							className="bg-white rounded-xl shadow-md p-4 border border-yellow-300 hover:shadow-lg transition"
+							className="bg-gray-500 rounded-xl shadow-md p-4 border  border-yellow-300 hover:shadow-lg transition"
 						>
-							<h3 className="text-lg font-semibold text-yellow-700 mb-1">
+							<h3 className="text-lg font-semibold t text-white mb-1">
 								🏆 {reward.title}
 							</h3>
-							<p className="text-sm text-gray-600">Reward unlocked!</p>
+							<p className="text-sm  text-white">Reward unlocked!</p>
 						</div>
 					))}
 				</div>

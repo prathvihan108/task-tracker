@@ -14,7 +14,11 @@ export default function Header() {
 
 	return (
 		<header className="flex justify-between items-center p-4 bg-white shadow-md">
-			<h1 className="text-xl font-bold">Task Tracker</h1>
+			<div className="flex gap-1">
+				<h1 className="text-xl font-bold">Task Tracker</h1>
+				<img src="/logo.png" alt="logo" className="w-10 h-10" />
+			</div>
+
 			<nav className="space-x-4 flex items-center">
 				{user ? (
 					<>

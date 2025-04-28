@@ -14,10 +14,17 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middlewares
+const allowedOrigins = process.env.CLIENT_ORIGINS.split(",");
+
 app.use(
 	cors({
-		origin: process.env.CLIENT_ORIGIN, // your frontend port
+		origin: function (origin, callback) {
+			if (!origin || allowedOrigins.includes(origin)) {
+				callback(null, true);
+			} else {
+				callback(new Error("Not allowed by CORS"));
+			}
+		},
 		methods: ["GET", "POST", "PUT", "DELETE"],
 		allowedHeaders: ["Content-Type", "Authorization"],
 	})
@@ -34,6 +41,10 @@ app.use("/api/users", userRoutes);
 
 app.get("/", (req, res) => {
 	res.json({ hello: 123 });
+});
+
+app.get("/health", (req, res) => {
+	res.json({ status: "ok", message: "Server is alive" });
 });
 
 // MongoDB connection

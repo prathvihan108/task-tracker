@@ -63,7 +63,7 @@ export default function TaskItem({ task, refresh }) {
 	};
 
 	return (
-		<div className="flex justify-between items-center bg-gray-50 p-2 mb-2 rounded">
+		<div className="flex justify-between items-center bg-gray-500 p-2 mb-2 rounded">
 			<span>{task.title}</span>
 			<div className="space-x-2">
 				<button
