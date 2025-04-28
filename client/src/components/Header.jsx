@@ -47,9 +47,26 @@ export default function Header() {
 						</button>
 					</>
 				) : (
-					<NavLink to="/login" className="hover:text-blue-500">
-						Dev:Prathviraj H
-					</NavLink>
+					<div className="flex items-center space-x-4">
+						<span className="font-semibold">Prathviraj H ~</span>
+						<NavLink
+							to="https://github.com/prathvihan108"
+							target="_blank"
+							rel="noopener noreferrer"
+							className="hover:text-blue-500"
+						>
+							GitHub
+						</NavLink>
+						<span className="text-gray-400">|</span>
+						<NavLink
+							to="https://www.linkedin.com/in/prathvirajh/"
+							target="_blank"
+							rel="noopener noreferrer"
+							className="hover:text-blue-500"
+						>
+							LinkedIn
+						</NavLink>
+					</div>
 				)}
 			</nav>
 		</header>
