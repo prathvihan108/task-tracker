@@ -11,4 +11,14 @@ export default defineConfig({
 		environment: "jsdom",
 		setupFiles: "./src/setupTests.js",
 	},
+
+	optimizeDeps: {
+		exclude: ["mongoose"],
+	},
+
+	build: {
+		rollupOptions: {
+			external: ["mongoose"],
+		},
+	},
 });
