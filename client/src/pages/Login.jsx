@@ -1,5 +1,5 @@
 // pages/Login.jsx
-import { signInWithGoogle } from "../firebase/auth"; // your sign-in util
+import { signInWithGoogle } from "../firebase/auth";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
@@ -27,8 +27,9 @@ export default function Login() {
 			</p>
 			<button
 				onClick={handleLogin}
-				className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-full font-semibold shadow-lg transition-transform transform hover:scale-105"
+				className="flex items-center gap-3 bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-full font-semibold shadow-lg transition-transform transform hover:scale-105"
 			>
+				<img src="/googleLogo.png" className="w-6 h-6" alt="Google logo" />
 				Sign in with Google
 			</button>
 		</div>

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { signOutUser } from "../firebase/auth";
 import { auth } from "../firebase/config.js";
+import InstallAppButton from "./InstallAppButton.jsx";
 export default function Header() {
 	const [user, setUser] = useState(null);
 	useEffect(() => {
@@ -69,11 +70,12 @@ export default function Header() {
 						</div>
 					</>
 				) : (
-					<div className="flex flex-row sm:flex-row sm:items-center sm:space-x-4">
-						<span className="font-semibold">~Prathviraj H</span>
-
-						<span className="text-gray-400 hidden sm:inline">|</span>
-					</div>
+					<>
+						<div className="flex flex-row sm:flex-row sm:items-center sm:space-x-4">
+							<span className="font-semibold">~Prathviraj H</span>
+						</div>
+						<InstallAppButton />
+					</>
 				)}
 			</nav>
 		</header>
