@@ -27,7 +27,7 @@ function InfoButton() {
 			<img
 				src="/info.svg"
 				alt="info"
-				className="w-10 h-10 cursor-pointer"
+				className="w-8 h-8 cursor-pointer"
 				onClick={handleInfoClick}
 			/>
 
