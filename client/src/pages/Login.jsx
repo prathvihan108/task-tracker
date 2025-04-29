@@ -11,7 +11,7 @@ export default function Login() {
 			const user = await signInWithGoogle();
 			console.log("signin completed");
 			console.log("Logged in as", user.displayName);
-			navigate("/dashboard");
+			navigate("/dashboard", { replace: true });
 		} catch (err) {
 			console.error("Login error:", err);
 		}

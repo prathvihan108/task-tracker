@@ -85,6 +85,9 @@ export default function RewardSystem({ showReward, setShowReward }) {
 					Reset Rewards
 				</button>
 			</div>
+			<p className="text-lg text-gray-700 font-semibold">
+				Unlock your rewards by completing all your tasks for the day! 🎯
+			</p>
 		</div>
 	);
 }
