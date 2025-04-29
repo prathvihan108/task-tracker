@@ -103,71 +103,73 @@ export default function Dashboard({ showReward, setShowReward }) {
 	const groupTasks = (status) => tasks.filter((t) => t.status === status);
 
 	return (
-		<div className="p-4 space-y-4">
-			<div className="flex justify-center mb-4">
-				<input
-					type="text"
-					placeholder="Enter new task"
-					value={newTask}
-					onChange={(e) => setNewTask(e.target.value)}
-					className="p-2 border rounded w-1/2"
-				/>
-				<button
-					onClick={handleCreateTask}
-					className="ml-2 px-4 py-2 bg-blue-500 text-white rounded"
-				>
-					Add Task
-				</button>
-			</div>
-
-			<div className="flex justify-around border-b border-gray-300 mb-4">
-				{["todo", "inprogress", "completed"].map((tab) => (
+		<div className="flex flex-col p-4 space-y-4">
+			<main className="flex-grow">
+				<div className="flex justify-center mb-4">
+					<input
+						type="text"
+						placeholder="Enter new task"
+						value={newTask}
+						onChange={(e) => setNewTask(e.target.value)}
+						className="p-2 border rounded w-1/2"
+					/>
 					<button
-						key={tab}
-						className={`py-2 px-4 font-semibold ${
-							activeTab === tab
-								? "text-blue-600 border-b-2 border-blue-600"
-								: "text-gray-500"
-						}`}
-						onClick={() => setActiveTab(tab)}
+						onClick={handleCreateTask}
+						className="ml-2 px-4 py-2 bg-blue-500 text-white rounded"
 					>
-						{tab === "todo"
-							? `To Do: ${groupTasks(tab).length}`
-							: tab === "inprogress"
-							? `In progress: ${groupTasks(tab).length}`
-							: `Completed: ${groupTasks(tab).length}`}
+						Add Task
 					</button>
-				))}
-			</div>
-			<div className="w-100%">
-				{activeTab === "todo" && (
-					<TaskColumn
-						title="To Do tasks"
-						tasks={groupTasks("todo")}
-						count={groupTasks.length}
-						refresh={updateTasks}
-					/>
-				)}
-				{activeTab === "inprogress" && (
-					<TaskColumn
-						title="In Progress tasks"
-						tasks={groupTasks("inprogress")}
-						refresh={updateTasks}
-					/>
-				)}
-				{activeTab === "completed" && (
-					<TaskColumn
-						title="Completed tasks"
-						tasks={groupTasks("completed")}
-						refresh={updateTasks}
-					/>
-				)}
-			</div>
+				</div>
 
-			<Heatmap tasks={tasks} />
-			{showReward && (
-				<RewardPopup showReward={showReward} setShowReward={setShowReward} />
-			)}
+				<div className="flex justify-around border-b border-gray-300 mb-4">
+					{["todo", "inprogress", "completed"].map((tab) => (
+						<button
+							key={tab}
+							className={`py-2 px-4 font-semibold ${
+								activeTab === tab
+									? "text-blue-600 border-b-2 border-blue-600"
+									: "text-gray-500"
+							}`}
+							onClick={() => setActiveTab(tab)}
+						>
+							{tab === "todo"
+								? `To Do: ${groupTasks(tab).length}`
+								: tab === "inprogress"
+								? `In progress: ${groupTasks(tab).length}`
+								: `Completed: ${groupTasks(tab).length}`}
+						</button>
+					))}
+				</div>
+				<div className="w-100%">
+					{activeTab === "todo" && (
+						<TaskColumn
+							title="To Do tasks"
+							tasks={groupTasks("todo")}
+							count={groupTasks.length}
+							refresh={updateTasks}
+						/>
+					)}
+					{activeTab === "inprogress" && (
+						<TaskColumn
+							title="In Progress tasks"
+							tasks={groupTasks("inprogress")}
+							refresh={updateTasks}
+						/>
+					)}
+					{activeTab === "completed" && (
+						<TaskColumn
+							title="Completed tasks"
+							tasks={groupTasks("completed")}
+							refresh={updateTasks}
+						/>
+					)}
+				</div>
+
+				<Heatmap tasks={tasks} />
+				{showReward && (
+					<RewardPopup showReward={showReward} setShowReward={setShowReward} />
+				)}
+			</main>
 		</div>
 	);
 }
