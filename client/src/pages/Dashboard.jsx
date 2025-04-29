@@ -104,10 +104,6 @@ export default function Dashboard({ showReward, setShowReward }) {
 
 	return (
 		<div className="p-4 space-y-4">
-			{/* Create Task Input */}
-			<h2 className="flex justify-center m-aut text-2xl font-bold">
-				Task Tracker
-			</h2>
 			<div className="flex justify-center mb-4">
 				<input
 					type="text"
@@ -143,7 +139,7 @@ export default function Dashboard({ showReward, setShowReward }) {
 					</button>
 				))}
 			</div>
-			<div className="w-screen">
+			<div className="w-100%">
 				{activeTab === "todo" && (
 					<TaskColumn
 						title="To Do tasks"

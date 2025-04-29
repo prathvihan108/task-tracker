@@ -18,7 +18,7 @@ export default function Login() {
 	};
 
 	return (
-		<div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-indigo-100 to-purple-200 p-6">
+		<div className="flex flex-col items-center min-h-screen bg-gradient-to-br from-blue-100 to-gray-200 p-6">
 			<h1 className="text-4xl md:text-5xl font-bold mb-4 text-center text-gray-800">
 				Dream big. Start small. Act now.
 			</h1>
@@ -27,7 +27,7 @@ export default function Login() {
 			</p>
 			<button
 				onClick={handleLogin}
-				className="flex items-center gap-3 bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-full font-semibold shadow-lg transition-transform transform hover:scale-105"
+				className="flex items-center gap-3 bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded-full font-semibold shadow-lg transition-transform transform hover:scale-105"
 			>
 				<img src="/googleLogo.png" className="w-6 h-6" alt="Google logo" />
 				Sign in with Google

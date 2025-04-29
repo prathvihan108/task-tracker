@@ -63,18 +63,26 @@ export default function TaskItem({ task, refresh }) {
 	};
 
 	return (
-		<div className="flex flex-col sm:flex-row justify-between items-center bg-gray-500 p-4 mb-2 rounded">
-			<span className="text-white text-sm sm:text-base">{task.title}</span>
-			<div className="space-x-2 mt-2 sm:mt-0 sm:flex sm:space-x-4">
+		<div className="flex flex-col sm:flex-row justify-between items-center bg-gray-50 p-4 mb-4 rounded-lg shadow-md w-full">
+			{/* Task Title */}
+			<span className="text-gray-900 text-sm sm:text-lg font-semibold">
+				{task.title}
+			</span>
+
+			{/* Action Buttons */}
+			<div className="space-x-2 mt-3 sm:mt-0 sm:flex sm:space-x-4">
+				{/* Next Button */}
 				<button
 					onClick={changeStatus}
-					className="text-sm sm:text-base bg-blue-400 text-white px-3 py-2 rounded"
+					className="bg-blue-500 hover:bg-blue-600 text-white text-sm sm:text-base px-4 py-2 rounded-md transition duration-200"
 				>
 					Next
 				</button>
+
+				{/* Delete Button */}
 				<button
 					onClick={deleteTask}
-					className="text-sm sm:text-base bg-red-400 text-white px-3 py-2 rounded"
+					className="bg-red-500 hover:bg-red-600 text-white text-sm sm:text-base px-4 py-2 rounded-md transition duration-200"
 				>
 					Delete
 				</button>

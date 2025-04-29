@@ -3,6 +3,8 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { signOutUser } from "../firebase/auth";
 import { auth } from "../firebase/config.js";
 import InstallAppButton from "./InstallAppButton.jsx";
+import InfoButton from "./InfoButton.jsx";
+import ProfileSection from "./ProfileSection.jsx";
 export default function Header() {
 	const [user, setUser] = useState(null);
 	useEffect(() => {
@@ -14,16 +16,20 @@ export default function Header() {
 	}, []);
 
 	return (
-		<header className="flex flex-wrap justify-between items-center p-4 bg-white shadow-md">
-			<div className="flex items-center gap-2">
-				<img src="/logo.png" alt="logo" className="w-10 h-10" />
-				<h1 className="text-xl font-bold">Task Tracker</h1>
+		<header className="flex flex-wrap justify-between items-center p-4 bg-blue-300 shadow-md">
+			<div className="flex justify-between w-full items-center">
+				<div className="flex items-center gap-2">
+					<img src="/logo.png" alt="logo" className="w-10 h-10" />
+					<h1 className="text-xl font-bold text-white">Task Tracker</h1>
+				</div>
+
+				<InfoButton />
 			</div>
 
 			<nav className="flex flex-col sm:flex-row sm:items-center sm:justify-center w-full mt-4 sm:mt-0 text-center gap-4 sm:gap-8">
 				{user ? (
 					<>
-						<div className="flex flex-row items-center justify-center  w-full mb-2 sm:mb-0">
+						<div className="flex flex-row items-center justify-center w-full mb-2 sm:mb-0">
 							<NavLink
 								to="/dashboard"
 								className={({ isActive }) =>
@@ -47,35 +53,13 @@ export default function Header() {
 							</NavLink>
 						</div>
 
-						<div className="flex flex-col sm:flex-row mb-4.5 sm:items-center sm:space-x-10">
-							<div className="flex items-center space-x-2">
-								<img
-									src={user?.photoURL || "/profile.png"}
-									alt="Profile"
-									className="w-8 h-8 rounded-full object-cover"
-									onError={(e) => (e.target.src = "/profile.png")}
-								/>
-								<div className="text-sm text-left">
-									<p className="font-semibold">{user.displayName}</p>
-									<p className="text-gray-600">{user.email}</p>
-								</div>
-							</div>
-
-							<button
-								onClick={signOutUser}
-								className="bg-red-500 text-white px-3 py-1 rounded mt-2 sm:mt-0 sm:self-start"
-							>
-								Logout
-							</button>
-						</div>
+						{/* Profile Section */}
+						<ProfileSection user={user} signOutUser={signOutUser} />
 					</>
 				) : (
-					<>
-						<div className="flex flex-row sm:flex-row sm:items-center sm:space-x-4">
-							<span className="font-semibold">~Prathviraj H</span>
-						</div>
+					<div className="w-full flex justify-center items-center mt-1 sm:mt-0">
 						<InstallAppButton />
-					</>
+					</div>
 				)}
 			</nav>
 		</header>
